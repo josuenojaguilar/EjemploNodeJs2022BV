@@ -65,8 +65,24 @@ function Login(req, res) {
     })
 }
 
+function editarUsuario(req, res) {
+    var idUser = req.params.idUsuario;
+    var parametros = req.body;
 
+    // BORRAR LA PROPIEDAD DE PASSWORD EN EL BODY
+    delete parametros.password
 
+    if( req.user.sub !== idUser ) {
+        return res.status(500).send({ mensaje: 'No tiene los permisos para editar este Usuario.' });
+    }
+
+    Usuario.findByIdAndUpdate(req.user.sub, parametros, {new: true}, (err, usuarioEditado)=>{
+        if(err) return res.status(500).send({ mensaje: 'Error en  la peticion'});
+        if(!usuarioEditado) return res.status(500).send({mensaje: 'Error al editar el Usuario'});
+
+        return res.status(200).send({ usuario: usuarioEditado });
+    })
+}
 
 
 
@@ -139,6 +155,7 @@ function BusquedaNombreYApellido(req, res) {
 module.exports = {
     Registrar,
     Login,
+    editarUsuario,
     BusquedaNombre,
     BusquedaNombreRegex,
     BusquedaNombreRegexBody,
