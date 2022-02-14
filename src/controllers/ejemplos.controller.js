@@ -1,6 +1,7 @@
 
 function ejemplo (req, res) {
-    res.send('Hola Mundo, estoy usando Express!!!');
+    console.log(req.user)
+    res.send('El email de la persona con este token es: ' + req.user.email);
 }
 
 function EjemploParametrosObligatorios (req, res) {
