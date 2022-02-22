@@ -1,7 +1,17 @@
 
 function ejemplo (req, res) {
-    console.log(req.user)
-    res.send('El email de la persona con este token es: ' + req.user.email);
+    var parametro = req.body;
+    if(req.user.rol = "ROL_MAESTRO" ){
+        if(parametro.nombre){
+            res.send('El email de la persona con este token es: ' + parametro.nombre);
+        }else{
+            return res.send({mensaje: 'Debes enviar los paraametros obligatorios.'})
+        }
+       
+    } else {
+        return res.send({ mensaje: 'Solo puede entrar el Maestro.' })
+    }
+    
 }
 
 function EjemploParametrosObligatorios (req, res) {
