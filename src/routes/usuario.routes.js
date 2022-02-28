@@ -14,5 +14,10 @@ api.get('/buscarNombreRegexBody', controladorUsuario.BusquedaNombreRegexBody);
 api.get('/buscarNombreOApellido', controladorUsuario.BusquedaNombreOApellido);
 api.get('/buscarNombreYApellido', controladorUsuario.BusquedaNombreYApellido);
 api.put('/editarUsuario/:idUsuario', md_autenticacion.Auth, controladorUsuario.editarUsuario);
+api.get('/obtenerUsuario', md_autenticacion.Auth, controladorUsuario.obtenerUsuario)
+
+// Carrito
+api.put('/agregarCarrito', md_autenticacion.Auth, controladorUsuario.agregarProductoCarrito);
+
 
 module.exports = api;

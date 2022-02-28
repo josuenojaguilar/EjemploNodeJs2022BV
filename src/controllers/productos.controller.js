@@ -15,10 +15,11 @@ function AgregarProductos (req, res) {
     var parametros = req.body;
     var modeloProductos = new Productos();
     
-    if( parametros.nombre && parametros.proveedor ){
+    if( parametros.nombre && parametros.cantidad && parametros.precio ){
         modeloProductos.nombre = parametros.nombre;
-        modeloProductos.proveedor = parametros.proveedor;
         modeloProductos.sabores = [];
+        modeloProductos.cantidad = parametros.cantidad;
+        modeloProductos.precio = parametros.precio;
 
         modeloProductos.save((err, productoGuardado)=>{
 
@@ -56,6 +57,24 @@ function EliminarProductos(req, res) {
     })
 }
 
+// Incrementar stock productos
+function stockProducto(req, res) {
+    const productoId = req.params.idProducto;
+    const parametros = req.body;
+
+    Productos.findByIdAndUpdate(productoId, { $inc : {cantidad : parametros.cantidad} }, {new : true},
+        (err, stockModificado)=>{
+            if(err) return res.status(500).send({ mensaje: 'Error en la peticion'});
+            if(!stockModificado) return res.status(500).send({mensaje: 'Error incrementar la cantidad del producto'});
+
+            return res.status(200).send({ producto: stockModificado })
+        })
+
+
+}
+
+
+
 function agregarProveedor(req, res) {
     const parametros = req.body;
     const modeloProveedor = new Proveedor();
@@ -92,6 +111,32 @@ function agregarProvedorProducto(req, res) {
         })
 }
 
+function editarProveedorProducto(req, res) {
+    const proveedorId = req.params.idProveedor;
+    const parametros = req.body;
+
+    Productos.findOneAndUpdate({ provedores: { $elemMatch: { _id: proveedorId } } }, 
+        { "provedores.$.idProveedor" : parametros.proveedor }, {new : true}, (err, proveedorActualizado)=>{
+            if(err) return res.status(500).send({ mensaje: 'Error en la peticion'});
+            if(!proveedorActualizado) return res.status(500).send({ mensaje: 'Error al editar el proveedor'});
+
+            return res.status(200).send({ producto: proveedorActualizado })
+        })
+}
+
+function eliminarProveedorProducto(req, res){
+    const proveedorId = req.params.idProveedor;
+
+    Productos.findOneAndUpdate({ provedores : { $elemMatch : { _id: proveedorId } } }, 
+        { $pull : { provedores : { _id : proveedorId } } }, {new : true}, (err, proveedorEliminado)=>{
+            if(err) return res.status(500).send({ mensaje: 'Error en la peticion'});
+            if(!proveedorEliminado) return res.status(500).send({ mensaje: 'Error al eliminar el Proveedor'});
+
+            return res.status(200).send({producto : proveedorEliminado})
+        })
+}
+
+
 function buscarProductoXProveedor(req, res) {
     const proveedorId = req.params.idProveedor;
 
@@ -111,5 +156,8 @@ module.exports = {
     EliminarProductos,
     agregarProveedor,
     agregarProvedorProducto,
-    buscarProductoXProveedor
+    buscarProductoXProveedor,
+    stockProducto,
+    editarProveedorProducto,
+    eliminarProveedorProducto
 }
