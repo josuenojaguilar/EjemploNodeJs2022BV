@@ -6,7 +6,7 @@ const Proveedor = require('../models/proveedor.model');
 function ObtenerProductos (req, res) {
     Productos.find({}, (err, productosEncontrados) => {
 
-        return res.send({ productos: productosEncontrados })
+        return res.status(200).send({ productos: productosEncontrados })
     }).populate('provedores.idProveedor')
 }
 
