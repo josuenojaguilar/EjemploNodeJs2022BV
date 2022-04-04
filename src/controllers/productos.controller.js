@@ -26,7 +26,7 @@ function AgregarProductos (req, res) {
             return res.send({ productos: productoGuardado});
         });
     } else {
-        return res.send({ mensaje: "Debe enviar los parametros obligatorios."})
+        return res.status(400).send({ mensaje: "Debe enviar los parametros obligatorios."})
     }
 
 

@@ -11,6 +11,7 @@ exports.Auth = function (req, res, next) {
 
     try {
         var payload = jwt_simple.decode(token, claveSecreta);
+        console.log(payload);
         // EXP = variable que contiene el tiempo de expiracion del token
         if(payload.exp <= moment().unix()){
             return res.status(500).send({ mensaje: "El token ha expirado."});

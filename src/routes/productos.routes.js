@@ -1,11 +1,12 @@
 // IMPORTACIONES
 const express = require('express');
 const productosControlador = require('../controllers/productos.controller');
+const md_autenticacion = require('../middlewares/autenticacion');
 
 // RUTAS
 const api = express.Router();
 
-api.get('/productos', productosControlador.ObtenerProductos);
+api.get('/productos', md_autenticacion.Auth ,productosControlador.ObtenerProductos);
 api.post('/agregarProductos', productosControlador.AgregarProductos);
 api.put('/editarProducto/:idProducto', productosControlador.EditarProductos);
 api.delete('/eliminarProducto/:idProducto', productosControlador.EliminarProductos);

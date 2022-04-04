@@ -54,8 +54,15 @@ function Login(req, res) {
             bcrypt.compare(parametros.password, usuarioEncontrado.password, 
                 (err, verificacionPassword) => {//TRUE OR FALSE
                     if (verificacionPassword) {
-                        return res.status(200)
-                            .send({ token: jwt.crearToken(usuarioEncontrado) })
+                        if(parametros.obtenerToken == 'true'){
+                            return res.status(200)
+                                .send({ token: jwt.crearToken(usuarioEncontrado) })
+                        } else {
+                            usuarioEncontrado.password = undefined;
+
+                            return res.status(200)
+                                .send({ usuario: usuarioEncontrado })
+                        }                       
                     } else {
                         return res.status(500)
                             .send({ mensaje: 'La contrasena no coincide.'})
