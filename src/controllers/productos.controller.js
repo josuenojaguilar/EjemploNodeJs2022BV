@@ -10,6 +10,18 @@ function ObtenerProductos (req, res) {
     }).populate('provedores.idProveedor')
 }
 
+//OBTENER UN PRODUCTO EN ESPECIFICO
+function ObtenerProductoId (req, res) {
+    const idPro = req.params.idProducto;
+
+    Productos.findById(idPro, (err, productoEncontrado)=>{
+        if(err) return res.status(500).send({ mensaje: 'Error en la peticion' });
+        if(!productoEncontrado) return res.status(500).send({ mensaje: 'Error al obtener el Producto'});
+
+        return res.status(200).send({ producto: productoEncontrado })
+    })
+}
+
 // AGREGAR PRODUCTOS
 function AgregarProductos (req, res) {
     var parametros = req.body;
@@ -159,5 +171,6 @@ module.exports = {
     buscarProductoXProveedor,
     stockProducto,
     editarProveedorProducto,
-    eliminarProveedorProducto
+    eliminarProveedorProducto,
+    ObtenerProductoId
 }

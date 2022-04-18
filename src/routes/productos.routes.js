@@ -11,6 +11,7 @@ api.post('/agregarProductos', productosControlador.AgregarProductos);
 api.put('/editarProducto/:idProducto', productosControlador.EditarProductos);
 api.delete('/eliminarProducto/:idProducto', productosControlador.EliminarProductos);
 api.put('/controlStock/:idProducto', productosControlador.stockProducto);
+api.get('/producto/:idProducto', productosControlador.ObtenerProductoId)
 
 // PROVEEDOR
 api.post('/agregarProveedor', productosControlador.agregarProveedor);
